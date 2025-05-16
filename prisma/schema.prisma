@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../generated/prisma"
@@ -13,3 +7,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model NotaFiscal {
+  id              String   @id @default(uuid())
+  cnpj            String
+  municipio       String
+  estado          String
+  valor           Float
+  dataDesejada    DateTime
+  descricao       String
+  dataCriacao     DateTime @default(now())
+  dataAtualizacao DateTime @updatedAt
+  status          Status   @default(PENDENTE_EMISSAO)
+  numeroNF        String?
+  dataEmissao     DateTime?
+}
+
+enum Status {
+  PENDENTE_EMISSAO
+  EMITIDA
+  CANCELADA
+}
+
