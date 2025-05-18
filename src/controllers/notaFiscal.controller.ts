@@ -6,7 +6,8 @@ export const criar = async (req: Request, res: Response) => {
     const nova = await service.criarSolicitacao(req.body);
     res.status(201).json(nova);
   } catch (err) {
-    res.status(400).json({ erro: err.message });
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    res.status(400).json({ erro: errorMessage });
   }
 };
 
@@ -26,6 +27,7 @@ export const emitir = async (req: Request, res: Response) => {
     const emitida = await service.emitirNota(req.params.id);
     res.json(emitida);
   } catch (err) {
-    res.status(400).json({ erro: err.message });
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    res.status(400).json({ erro: errorMessage });
   }
 };
