@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import notaFiscalRoutes from './routes/notaFiscal.routes';
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './swagger.json';
+import swaggerDocument from '../swagger.json';
 
 dotenv.config();
 const app = express();
