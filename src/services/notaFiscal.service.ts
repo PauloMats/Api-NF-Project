@@ -1,4 +1,4 @@
-import { prisma } from '../../prisma';
+import { prisma } from '../models/index';
 import { apiClient } from '../utils/apiClient';
 
 export const criarSolicitacao = async (data: any) => {
