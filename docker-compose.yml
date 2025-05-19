@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   db:
     image: postgres:16
@@ -7,6 +6,8 @@ services:
       POSTGRES_DB: apinf
       POSTGRES_USER: apinf_user
       POSTGRES_PASSWORD: senha_segura
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
     ports:
       - "5432:5432"
     volumes:
