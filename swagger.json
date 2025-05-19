@@ -2,32 +2,142 @@
   "openapi": "3.0.0",
   "info": {
     "title": "API de Notas Fiscais",
-    "version": "1.0.0"
+    "version": "1.0.0",
+    "description": "API para gerenciamento de solicitações e emissão de notas fiscais."
   },
   "paths": {
     "/api/notas-fiscais": {
       "post": {
         "summary": "Criar nova solicitação",
-        "requestBody": { "required": true },
-        "responses": { "201": { "description": "Criado" } }
+        "description": "Cria uma nova solicitação de nota fiscal.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/NotaFiscalInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Solicitação criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotaFiscal" }
+              }
+            }
+          },
+          "400": { "description": "Dados inválidos" }
+        }
       },
       "get": {
         "summary": "Listar todas",
-        "responses": { "200": { "description": "OK" } }
+        "description": "Lista todas as solicitações de notas fiscais.",
+        "responses": {
+          "200": {
+            "description": "Lista de notas fiscais",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/NotaFiscal" }
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/notas-fiscais/{id}": {
       "get": {
         "summary": "Buscar por ID",
-        "parameters": [{ "name": "id", "in": "path", "required": true }],
-        "responses": { "200": {}, "404": {} }
+        "description": "Busca uma nota fiscal pelo ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID da nota fiscal"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nota fiscal encontrada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotaFiscal" }
+              }
+            }
+          },
+          "404": { "description": "Nota fiscal não encontrada" }
+        }
       }
     },
     "/api/notas-fiscais/{id}/emitir": {
       "post": {
         "summary": "Emitir nota",
-        "parameters": [{ "name": "id", "in": "path", "required": true }],
-        "responses": { "200": {}, "400": {} }
+        "description": "Emite a nota fiscal correspondente ao ID.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" },
+            "description": "ID da nota fiscal"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Nota fiscal emitida com sucesso",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NotaFiscal" }
+              }
+            }
+          },
+          "400": { "description": "Erro ao emitir nota fiscal" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NotaFiscal": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "cnpj": { "type": "string" },
+          "municipio": { "type": "string" },
+          "estado": { "type": "string" },
+          "valor": { "type": "number" },
+          "dataDesejada": { "type": "string", "format": "date-time" },
+          "descricao": { "type": "string" },
+          "dataCriacao": { "type": "string", "format": "date-time" },
+          "dataAtualizacao": { "type": "string", "format": "date-time" },
+          "status": { "type": "string", "enum": ["PENDENTE_EMISSAO", "EMITIDA", "CANCELADA"] },
+          "numeroNF": { "type": "string", "nullable": true },
+          "dataEmissao": { "type": "string", "format": "date-time", "nullable": true }
+        }
+      },
+      "NotaFiscalInput": {
+        "type": "object",
+        "required": [
+          "cnpj",
+          "municipio",
+          "estado",
+          "valor",
+          "dataDesejada",
+          "descricao"
+        ],
+        "properties": {
+          "cnpj": { "type": "string" },
+          "municipio": { "type": "string" },
+          "estado": { "type": "string" },
+          "valor": { "type": "number" },
+          "dataDesejada": { "type": "string", "format": "date-time" },
+          "descricao": { "type": "string" }
+        }
       }
     }
   }
